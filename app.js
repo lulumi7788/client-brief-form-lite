@@ -30,7 +30,7 @@ const D={
   brandAspects:"",hasEvents:"no",specificEvents:"",sensitive:"",
   needConsumerProfile:"no",targetSegment:"",profileItems:"",
   filterLevel:"auto",noiseTypes:[],customExcludes:"",
-  modules:[],focusPoints:"",
+  modules:[],sensitive6:"",focusPoints:"",needSentiment:"no",analysisNotes:"",
   deliverables:[],audiences:[],extraNotes:"",
 };
 
@@ -245,7 +245,10 @@ function stepDOM(){
   }
   if(step===6)return frag(
     fi("希望報告包含哪些分析面向？（可複選）","","我們會根據您的選擇安排報告內容",pills(D.modules,"modules",MODULES)),
-    fi("這次分析最想回答的核心問題？","","最多列出三個最關心的問題，幫助分析師聚焦重點",inp("focusPoints","例：\n1. 我們的品牌形象跟競品相比如何？\n2. 消費者最不滿意的是什麼？\n3. 近期行銷活動有沒有帶動正面討論？",true,4))
+    fi("敏感議題或需避免分析的內容","","若有不希望出現在報告中的特定議題、事件或詞彙，請在此說明。",inp("sensitive6","例：避免提及特定負面事件、政治相關議題等",true,2)),
+    fi("核心問題（最多三個）","","這次報告最希望回答的問題，幫助分析師聚焦重點。",inp("focusPoints","1. \n2. \n3. ",true,4)),
+    fi("是否需要情緒正負評分析？","","針對各議題的討論內容，分析正面／負面／中性的情緒分佈。",yesno("needSentiment")),
+    fi("其他補充說明","","",inp("analysisNotes","任何額外需求或補充資訊",true,3))
   );
   if(step===7){
     const dlBox=document.createElement("div");dlBox.className="dl-box";
@@ -317,8 +320,11 @@ ${D.needConsumerProfile==="yes"?`- 目標族群：${D.targetSegment||"無限制"
 
 ## 六、分析深度
 - 分析模組：${D.modules.join("、")||"未指定"}
+- 敏感議題：${D.sensitive6||"無"}
 - 核心問題：
 ${(D.focusPoints||"（未填）").split("\n").map(l=>"  "+l).join("\n")}
+- 情緒正負評分析：${D.needSentiment==="yes"?"是":"否"}
+- 其他補充：${D.analysisNotes||"無"}
 
 ## 七、交付需求
 - 交付格式：${D.deliverables.join("、")||"未指定"}
