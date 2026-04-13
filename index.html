@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>社群輿情分析｜需求填寫表（客戶版）</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#f1f5f9;color:#0f172a}
+.wrap{max-width:700px;margin:0 auto;padding:28px 16px}
+.hd{text-align:center;margin-bottom:24px}
+.hd h1{font-size:20px;font-weight:600;color:#0f172a}
+.hd p{font-size:13px;color:#64748b;margin-top:4px}
+.badge{display:inline-block;margin-top:8px;padding:3px 12px;border-radius:20px;font-size:11px;font-weight:600;background:#dbeafe;color:#1d4ed8}
+.steps{margin-bottom:18px}
+.step-row{display:flex;justify-content:space-between;margin-bottom:8px}
+.step-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:2px}
+.step-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;transition:background .2s;background:#e2e8f0;color:#94a3b8}
+.step-dot.done,.step-dot.active{background:#0f172a;color:#fff}
+.step-lbl{font-size:9px;color:#94a3b8;text-align:center;max-width:56px;line-height:1.2}
+.step-lbl.active{color:#0f172a;font-weight:600}
+.prog-bar{height:3px;background:#e2e8f0;border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:#0f172a;border-radius:2px;transition:width .3s}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px 26px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.card-title{font-size:16px;font-weight:600;color:#0f172a;margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid #f1f5f9}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:13px;font-weight:600;color:#1e293b;margin-bottom:4px}
+.field .req{color:#ef4444}
+.field .hint{font-size:12px;color:#64748b;margin-bottom:5px;line-height:1.5}
+input[type=text],.ta{width:100%;padding:8px 10px;border-radius:8px;border:1.5px solid #e2e8f0;font-size:13px;color:#1e293b;background:#fff;font-family:inherit;outline:none}
+input[type=text]:focus,.ta:focus{border-color:#94a3b8}
+.ta{resize:vertical}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{padding:5px 12px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;transition:all .15s;font-family:inherit}
+.pill.on{background:#0f172a;color:#fff;border-color:#0f172a}
+.radios{display:flex;flex-direction:column;gap:6px}
+.radio-item{display:flex;align-items:flex-start;gap:9px;cursor:pointer;padding:9px 12px;border-radius:8px;border:1.5px solid #e2e8f0;background:#fff;transition:all .15s}
+.radio-item.on{border-color:#0f172a;background:#f8fafc}
+.radio-dot{width:14px;height:14px;border-radius:50%;border:1.5px solid #cbd5e1;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center}
+.radio-item.on .radio-dot{border-color:#0f172a;background:#0f172a}
+.radio-inner{width:5px;height:5px;border-radius:50%;background:#fff}
+.radio-lbl{font-size:13px;font-weight:600;color:#1e293b}
+.radio-sub{font-size:12px;color:#64748b;margin-top:2px;line-height:1.4}
+.yesno{display:flex;gap:7px}
+.yn-btn{padding:6px 18px;border-radius:8px;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;font-size:13px;cursor:pointer;font-family:inherit;transition:all .15s}
+.yn-btn.on{background:#0f172a;color:#fff;border-color:#0f172a;font-weight:600}
+.tag-row{display:flex;gap:7px;margin-bottom:6px}
+.tag-row input{flex:1}
+.tag-add{padding:7px 12px;border-radius:8px;background:#0f172a;color:#fff;border:none;cursor:pointer;font-size:12px;font-family:inherit}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:12px;background:#f1f5f9;color:#334155}
+.tag-x{background:none;border:none;cursor:pointer;color:#94a3b8;font-size:14px;line-height:1;padding:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.nav{display:flex;justify-content:space-between;margin-bottom:14px}
+.btn-prev,.btn-next,.btn-preview{padding:9px 22px;border-radius:8px;font-size:13px;font-family:inherit;cursor:pointer;font-weight:500;transition:all .15s}
+.btn-prev{border:1.5px solid #e2e8f0;background:#fff;color:#374151}
+.btn-prev:disabled{opacity:.35;cursor:default}
+.btn-next{border:none;background:#0f172a;color:#fff}
+.btn-preview{border:1.5px solid #0f172a;background:#fff;color:#0f172a}
+.btn-dl{padding:12px;border-radius:10px;border:none;background:#3b82f6;color:#fff;width:100%;margin-top:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-dl.done{background:#10b981}
+.dl-box{border:1.5px dashed #bfdbfe;border-radius:12px;padding:18px 20px;background:#eff6ff;margin-top:8px}
+.dl-box-hd{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.dl-icon{font-size:24px}
+.dl-ttl{font-size:14px;font-weight:600;color:#1e293b}
+.dl-sub{font-size:12px;color:#64748b;line-height:1.5}
+.preview-wrap{background:#0f172a;border-radius:12px;padding:20px;margin-bottom:12px}
+.preview-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.preview-lbl{font-size:11px;color:#64748b;letter-spacing:2px;text-transform:uppercase}
+.btn-copy{padding:5px 14px;border-radius:6px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;cursor:pointer;font-size:12px;font-family:inherit}
+.btn-copy.done{background:#10b981;color:#fff}
+pre.brief{font-size:11px;line-height:1.8;white-space:pre-wrap;font-family:'Courier New',monospace;color:#e2e8f0}
+.summary-bar{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px 14px;font-size:12px;color:#475569;display:flex;flex-wrap:wrap;gap:6px 12px}
+.info-box{background:#f8fafc;border-radius:8px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:#64748b;line-height:1.6;border:1px solid #e2e8f0}
+.sub-box{margin-top:9px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hd">
+    <h1>社群輿情分析｜需求填寫表</h1>
+    <p>請依序填寫以下資訊，協助我們更了解您的分析需求</p>
+    <span class="badge">客戶版</span>
+  </div>
+  <div class="steps">
+    <div class="step-row" id="step-row"></div>
+    <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+  </div>
+  <div class="card" id="step-card">
+    <div class="card-title" id="card-title"></div>
+    <div id="step-body"></div>
+  </div>
+  <div class="nav">
+    <button class="btn-prev" id="btn-prev" onclick="prevStep()">← 上一步</button>
+    <div style="display:flex;gap:8px">
+      <button class="btn-preview" id="btn-preview" style="display:none" onclick="togglePreview()">預覽填寫內容</button>
+      <button class="btn-next" id="btn-next" onclick="nextStep()">下一步 →</button>
+    </div>
+  </div>
+  <div id="preview-area" style="display:none">
+    <div class="preview-wrap">
+      <div class="preview-hd">
+        <span class="preview-lbl">填寫內容預覽</span>
+        <button class="btn-copy" id="btn-copy" onclick="copyBrief()">複製全文</button>
+      </div>
+      <pre class="brief" id="brief-pre"></pre>
+    </div>
+  </div>
+  <div id="summary-bar" class="summary-bar" style="display:none"></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
